@@ -1,17 +1,8 @@
 # Vanishing Gradient Demonstrator (VGD)
-
-![Version](https://img.shields.io/badge/version-1.0.0-blue)
-![Python](https://img.shields.io/badge/python-3.8+-green)
-![PyTorch](https://img.shields.io/badge/pytorch-2.0+-ee4c2c)
-
-A **modular, research-oriented educational library** for diagnosing and understanding the **vanishing gradient problem** in deep neural networks.
-
-Built with a strong emphasis on **transparency and experimentation**, VGD provides a controlled environment to observe how gradients evolve across layers under different architectural and functional choices.
-
----
-
 ##  Overview
 
+A **modular, research-oriented educational library** for diagnosing and understanding the **vanishing gradient problem** in deep neural networks.
+Built with a strong emphasis on **transparency and experimentation**, VGD provides a controlled environment to observe how gradients evolve across layers under different architectural and functional choices.
 The vanishing gradient problem arises when gradients shrink exponentially as they propagate backward through deep networks. This leads to:
 
 * Minimal weight updates in early layers
