@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+*$py.class
+results/
+.ipynb_checkpoints/
+.vscode/
+.idea/
+*.png
+metrics.json
