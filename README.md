@@ -1,47 +1,243 @@
 # Vanishing Gradient Demonstrator (VGD)
 
-An educational tool to visualize and understand the vanishing gradient problem in deep neural networks.
+![Version](https://img.shields.io/badge/version-1.0.0-blue)
+![Python](https://img.shields.io/badge/python-3.8+-green)
+![PyTorch](https://img.shields.io/badge/pytorch-2.0+-ee4c2c)
 
-## 🚀 Features
-- **Probe Network**: MLP with built-in hooks to capture gradients, activations, and weight updates.
-- **Custom Activations**: Define your own activation functions as strings using SymPy syntax.
-- **Deep Network Analysis**: Compare Sigmoid, ReLU, and Tanh across many layers to see where learning stalls.
-- **Automatic Visualization**: Generates loss curves, gradient flow charts, and activation histograms.
+A **modular, research-oriented educational library** for diagnosing and understanding the **vanishing gradient problem** in deep neural networks.
 
-## 📦 Installation
+Built with a strong emphasis on **transparency and experimentation**, VGD provides a controlled environment to observe how gradients evolve across layers under different architectural and functional choices.
+
+---
+
+##  Overview
+
+The vanishing gradient problem arises when gradients shrink exponentially as they propagate backward through deep networks. This leads to:
+
+* Minimal weight updates in early layers
+* Slow or stalled training
+* Poor convergence in deep architectures
+
+While widely discussed in theory, it is rarely *observed directly*.
+
+**VGD addresses this gap** by exposing the internal dynamics of neural networks through structured experiments and precise instrumentation.
+
+---
+
+##  What This Project Enables
+
+VGD is designed as a **glass-box system**, allowing you to:
+
+* Trace **gradient flow layer-by-layer**
+* Measure how different **activation functions impact learning**
+* Analyze **training stability through quantitative metrics**
+* Experiment with **custom-defined activation functions**
+* Compare configurations in a controlled, reproducible setting
+
+---
+
+##  Core Features
+
+###  Probe Network with Gradient Instrumentation
+
+A custom-built feedforward network that automatically logs:
+
+* Gradient L2 norms per layer (per epoch)
+* Weight update magnitudes
+* Activation distributions
+
+---
+
+###  Activation Function Engine
+
+Supports both standard and custom activations:
+
+**Built-in:**
+
+* Sigmoid
+* Tanh
+* ReLU
+* Leaky ReLU
+* ELU
+* Swish
+
+**Custom (via SymPy):**
+
+```python
+x / (1 + abs(x))
+```
+
+* Symbolic differentiation handled automatically
+* Seamless integration into PyTorch pipeline
+
+---
+
+### Structured Metric Collection
+
+During training, the system records:
+
+* Loss trajectory
+* Gradient norms across layers
+* Activation distributions
+* Weight update magnitudes
+
+All outputs are cleanly packaged into a `TrainingResult` object.
+
+---
+
+### Visualization Engine
+
+Automatically generates:
+
+* Gradient flow plots (layer vs magnitude)
+* Loss curves (epoch vs loss)
+* Activation histograms
+
+Saved to `results/` for reproducibility and analysis.
+
+---
+
+###  Experiment Comparison
+
+Run multiple configurations and directly compare:
+
+* Gradient decay patterns
+* Convergence behavior
+* Stability across architectures
+
+---
+
+##  Architecture
+
+The project follows a **layered, modular design** to ensure clarity and extensibility:
+
+```text
+vanishing_gradients/
+│
+├── core/                   # Fundamental ML components
+│   ├── activations.py
+│   ├── datasets.py
+│   ├── model.py
+│   └── trainer.py
+│
+├── experiment/             # Orchestration layer
+│   ├── config.py
+│   └── experiment.py
+│
+├── analysis/               # Post-training analysis
+│   ├── visualizer.py
+│   └── metrics.py
+│
+├── utils/                  # Shared utilities
+│   ├── logging.py
+│   └── seed.py
+│
+├── results/                # Generated outputs
+└── main.py                 # Example usage
+```
+
+---
+
+## Installation
+
+### Requirements
+
+* Python 3.8+
+* PyTorch
+* NumPy
+* scikit-learn
+* SymPy
+* Matplotlib / Plotly
+
+### Setup
+
 ```bash
+git clone <repo-url>
+cd vanishing_gradients
 pip install -r requirements.txt
 ```
 
-## 🛠️ Usage
-Run the demo to compare deep Sigmoid vs ReLU networks:
-```bash
-python main.py
-```
+---
 
-### Example: Custom Activation
-You can use the experimental API to test your own functions:
+##  Usage
+
+### Run a Baseline Experiment
+
 ```python
-from vgd import ExperimentConfig, Experiment
+from experiment.config import ExperimentConfig
+from experiment.experiment import Experiment
 
 config = ExperimentConfig(
-    activation="Custom",
-    custom_expr="x / (1 + x**2)**0.5",
+    activation="Sigmoid",
+    loss="cross_entropy",
     n_layers=6,
-    label="custom_run"
+    hidden_dim=64,
+    dataset="synthetic",
+    epochs=50,
+    lr=0.01,
+    label="sigmoid_baseline"
 )
-Experiment(config).run()
+
+result = Experiment(config).run()
 ```
 
-## 📂 Project Structure
-- `vgd/`: Core library package.
-  - `activations.py`: Symbolic and built-in activations.
-  - `model.py`: MLP with diagnostic hooks.
-  - `trainer.py`: Training orchestration.
-  - `visualizer.py`: Plotting engine.
-  - `experiment.py`: Orchestrator.
-- `main.py`: Entry point for demo.
-- `results/`: Directory where plots and metrics are saved.
+---
 
-## 📊 Sample Output
-The tool generates plots like `gradient_flow.png` which shows the exponential decay of gradients in Sigmoid networks compared to the healthy flow in ReLU networks.
+### Compare Two Configurations
+
+```python
+from experiment.experiment import compare
+
+compare(
+    ExperimentConfig(activation="Sigmoid", ...),
+    ExperimentConfig(activation="ReLU", ...)
+)
+```
+
+---
+
+### Custom Activation Example
+
+```python
+config = ExperimentConfig(
+    activation="Custom",
+    custom_expr="x * sigmoid(x)",  # Swish
+    n_layers=10,
+    label="custom_activation_run"
+)
+```
+
+---
+
+##  Output Artifacts
+
+Each run generates a dedicated folder in `results/` containing:
+
+* Gradient flow plots
+* Loss curves
+* Activation distributions
+* Metrics summary (`metrics.json`)
+
+---
+
+##  Sample Insight
+
+| Sigmoid Network                             | ReLU Network                  |
+| ------------------------------------------- | ----------------------------- |
+| Gradients decay exponentially across layers | Gradients remain stable       |
+| Early layers receive near-zero updates      | Consistent updates throughout |
+| Training stagnates                          | Converges efficiently         |
+
+
+
+##  Future Extensions
+
+* Per-layer activation configuration
+* Optimizer comparisons
+* Gradient clipping experiments
+* Optional lightweight UI layer
+
+
+Modify components. Break things. Run comparisons.
+
+Understanding emerges not from reading about gradients—but from **watching them fail and fixing them**.
