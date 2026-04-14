@@ -13,20 +13,6 @@ While widely discussed in theory, it is rarely *observed directly*.
 
 **VGD addresses this gap** by exposing the internal dynamics of neural networks through structured experiments and precise instrumentation.
 
----
-
-##  What This Project Enables
-
-VGD is designed as a **glass-box system**, allowing you to:
-
-* Trace **gradient flow layer-by-layer**
-* Measure how different **activation functions impact learning**
-* Analyze **training stability through quantitative metrics**
-* Experiment with **custom-defined activation functions**
-* Compare configurations in a controlled, reproducible setting
-
----
-
 ##  Core Features
 
 ###  Probe Network with Gradient Instrumentation
