@@ -205,6 +205,10 @@ Each run generates a dedicated folder in `results/` containing:
 | Early layers receive near-zero updates      | Consistent updates throughout |
 | Training stagnates                          | Converges efficiently         |
 
+As example, the results for Sigmoid vanishing:
+<img width="2400" height="1200" alt="gradient_flow" src="https://github.com/user-attachments/assets/4bf2046e-481a-4bbd-91d0-d792a296b0cb" />
+<img width="2000" height="1000" alt="loss_curve" src="https://github.com/user-attachments/assets/3a29bd53-1bce-4195-bed1-697f9d924bce" />
+<img width="2000" height="1000" alt="weight_updates" src="https://github.com/user-attachments/assets/973d9985-f806-4f6c-998f-cbd669942725" />
 
 
 ##  Future Extensions
