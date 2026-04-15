@@ -39,7 +39,7 @@ def run_demo():
 
     # 4. Interactive Custom Input
     print("\n" + "="*45)
-    print(" INTERACTIVE MODE: Test your own activation")
+    print("Test your own activation function")
     print("="*45)
     print("Examples: 'x / (1 + x**2)**0.5', 'exp(-x**2)', 'sigmoid(x) * x'")
     
@@ -87,7 +87,7 @@ def run_demo():
             print(f"{label:<25} | {r.final_loss:<10.4f} | {health:<12}")
         print("="*65)
             
-    print("\nDemo complete. Thank you for using VGD!")
+    print("\nDemo complete!")
 
 if __name__ == "__main__":
     run_demo()
